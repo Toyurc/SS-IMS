@@ -113,6 +113,7 @@ class studentDetailsPage extends React.Component {
                                     students: res.data.students,
                                 })
                             })
+                            console.log('state', state)
                     }}
                     SubComponent={
                         row => {
@@ -120,7 +121,7 @@ class studentDetailsPage extends React.Component {
                                 <ReactTable
                                     className={'-striped text-align '}
                                     columns={this.detailsColumn()}
-                                    defaultPageSize={10}
+                                    defaultPageSize={1}
                                     getTheadProps={(state, rowInfo, column) => {
                                         return {
                                             style: {
@@ -135,7 +136,7 @@ class studentDetailsPage extends React.Component {
                                         // show the loading overlay
                                         this.setState({ loading: true })
                                         // fetch your data
-                                        Axios.get('https://cors-anywhere.herokuapp.com/https://csc-group-1a.herokuapp.com/students')
+                                        Axios.get('https://cors-anywhere.herokuapp.com/https://csc-group-1a.herokuapp.com/students/')
                                             .then((res) => {
                                                 // Update react-table
                                                 this.setState({

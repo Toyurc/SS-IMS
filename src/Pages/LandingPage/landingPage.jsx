@@ -21,8 +21,8 @@ class LandingPage extends React.Component {
                     <h3>Admin</h3>
                         <form id="student_form" method="POST">
                             <div >
-                                <label htmlFor="matricNo">Matric No.
-                                    <input type="number" name="matricNo" />
+                                <label htmlFor="staffNo">Staff No.
+                                    <input type="number" name="staffNo" />
                                 </label>
                             </div>
                             <div>
@@ -30,8 +30,8 @@ class LandingPage extends React.Component {
                                     <input type="password" name="stuPassword" />
                                 </label>
                             </div>
-                            <Link to="/students">
-                                <button type="submit" name="stu" className="button">Login</button>
+                            <Link to="/dashboard">
+                                <button type="submit" name="admin" className="button">Login</button>
                             </Link>
                         </form>
                     </div>

@@ -37,7 +37,7 @@ class StaffPage extends React.Component {
                     </div>
                     <div>
                         <p>
-                            <Link to="/staffs">Click here Staff Portal</Link>
+                            <Link to="/students">Click here Student Portal</Link>
                         </p>
                         <p>
                             <Link to="/">Click here Admin Portal</Link>

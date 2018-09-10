@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import './App.css';
 import LandingPage from '../src/Pages/LandingPage/landingPage';
-import StaffPage from '../src/Pages/StaffPage/staffPage';
-import StaffDetailsPage from '../src/Pages/StaffPage/staffDetailsPage';
-import StudentPage from '../src/Pages/StudentPage/studentPage';
-import StudentDetailsPage from '../src/Pages/StudentPage/studentDetailsPage';
 import {BrowserRouter as Router, Switch, Route} from "react-router-dom";
+import Dashboard from './Pages/Dashboard/dashboard';
+import { StaffRegistration,StudentRegistration } from './Pages/Registration';
+import { StaffDetailsPage,StaffPage,StaffUserPage } from './Pages/StaffPage';
+import { StudentDetailsPage,StudentPage,StudentUserPage } from './Pages/StudentPage';
 
 
 class App extends Component {
@@ -16,9 +16,15 @@ class App extends Component {
           <Switch>
             <Route path='/' exact component={LandingPage}/>
             <Route path='/staffs' exact component={StaffPage}/>
-            <Route path='/staffs/:staffid' exact component={StaffDetailsPage}/>
-            <Route path='/students' exact component={StudentPage}/>            
-            <Route path='/students/:studentid' exact component={StudentDetailsPage}/>
+            <Route path='/register/staff' exact component={StaffRegistration}/> 
+            <Route path='/staffs/table' exact component={StaffDetailsPage}/>
+            <Route path='/staffs/:staffId' exact component={StaffUserPage}/>
+            <Route path='/students' exact component={StudentPage}/>          
+            <Route path='/register/student' exact component={StudentRegistration}/> 
+            <Route path='/students/table' exact component={StudentDetailsPage}/>
+            <Route path='/students/:matricNo' exact component={StudentUserPage}/>
+            <Route path='/dashboard' exact component={Dashboard}/> 
+
           </Switch>
         </div>
       </Router>
