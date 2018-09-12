@@ -2,6 +2,73 @@ import React from 'react';
 import './studentPage.css';
 import { Link } from 'react-router-dom';
 class StudentPage extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            matricNo: '',
+            stuPassword: '',
+            formInProgress: false,
+            PersonalDataFormError: false,
+            buttonName: 'Login'
+        }
+        this.handleInputChange = this.handleInputChange.bind(this);
+    }
+
+    handleInputChange(event) {
+        const name = event.target.name;
+        let value = event.target.value;
+
+        this.setState({
+            [name]: value,
+        });
+    }
+
+    personalDataFormHandler(event) {
+        event.preventDefault();
+        console.log(this.state)
+        this.setState({
+            formInProgress: true,
+            buttonName: "In Progress..."
+        });
+
+        document.getElementById('stuSubmit').setAttribute('disabled', 'disabled')
+
+        const validationState = this.validatePersonalDataForm();
+
+        if (!validationState) {
+            this.setState({
+                formInProgress: false,
+                buttonName: "Login"
+            });
+            document.getElementById('stuSubmit').removeAttribute('disabled', 'disabled')
+            return false;
+        }
+        const userDetails = this.state;
+    }
+
+    validatePersonalDataForm() {
+        const {
+            matricNo,
+            stuPassword
+        } = this.state;
+
+        if (
+            !matricNo || !stuPassword
+        ) {
+            this.setState({
+                PersonalDataFormError: true,
+                errText: "You can't leave this field(s) empty",
+            });
+            setTimeout(() => {
+                this.setState({
+                    errText: '',
+                });
+            }, 3000);
+            return false;
+        }
+        return true;
+    }
+
     render() {
         return (
             <main>
@@ -19,20 +86,44 @@ class StudentPage extends React.Component {
                 <section id="login_form" className="section__login">
                     <div className="form__div card">
                         <h3>Students</h3>
-                        <form id="student_form" method="POST">
-                            <div >
-                                <label htmlFor="matricNo">Matric No.
-                                    <input type="number" name="matricNo" />
+                        <form
+                            onSubmit={event => this.personalDataFormHandler(event)}
+                            id="student_form"
+                            method="POST"
+                        >
+                            <div>
+                                <label
+                                    htmlFor="matricNo"
+                                    className={(this.state.PersonalDataFormError && this.state.matricNo === '') ? 'error' : 'registration__label'}
+                                >Matric No.
+                                    <input
+                                        type="number"
+                                        name="matricNo"
+                                        onChange={event => this.handleInputChange(event)}
+                                        value={this.state.matricNo}
+                                    />
                                 </label>
                             </div>
                             <div>
-                                <label htmlFor="stuPassword">Password
-                                    <input type="password" name="stuPassword" />
+                                <label
+                                    htmlFor="stuPassword"
+                                    className={(this.state.PersonalDataFormError && this.state.stuPassword === '') ? 'error' : 'registration__label'}
+                                >Password
+                                    <input
+                                        type="password"
+                                        name="stuPassword"
+                                        onChange={event => this.handleInputChange(event)}
+                                        value={this.state.stuPassword}
+                                    />
                                 </label>
                             </div>
-                            <Link to="/students">
-                                <button type="submit" name="stu" className="button">Login</button>
-                            </Link>
+                            {
+                                this.state.errText &&
+                                <div className="error-box">
+                                    {this.state.errText}
+                                </div>
+                            }
+                            <button type="submit" id="stuSubmit" className="button">{this.state.buttonName}</button>
                         </form>
                     </div>
                     <div>

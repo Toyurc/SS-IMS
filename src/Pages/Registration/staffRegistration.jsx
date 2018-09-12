@@ -50,6 +50,7 @@ class StaffRegistration extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            staff_no: '',
             first_name: '',
             last_name: '',
             phone_number: '',
@@ -100,6 +101,7 @@ class StaffRegistration extends React.Component {
 
     validatePersonalDataForm() {
         const {
+            staff_no,
             first_name,
             last_name,
             date_of_emp,
@@ -108,7 +110,8 @@ class StaffRegistration extends React.Component {
             dept
         } = this.state;
 
-        if (!first_name ||
+        if (!staff_no ||
+            !first_name ||
             !last_name ||
             !date_of_emp ||
             !phone_number ||

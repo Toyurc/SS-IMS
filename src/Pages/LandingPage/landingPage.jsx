@@ -2,6 +2,73 @@ import React from 'react';
 import './landingPage.css';
 import { Link } from 'react-router-dom';
 class LandingPage extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            adminNo: '',
+            adminPassword: '',
+            formInProgress: false,
+            PersonalDataFormError: false,
+            buttonName: 'Login'
+        }
+        this.handleInputChange = this.handleInputChange.bind(this);
+    }
+
+    handleInputChange(event) {
+        const name = event.target.name;
+        let value = event.target.value;
+
+        this.setState({
+            [name]: value,
+        });
+    }
+
+    personalDataFormHandler(event) {
+        event.preventDefault();
+        console.log(this.state)
+        this.setState({
+            formInProgress: true,
+            buttonName: "In Progress..."
+        });
+
+        document.getElementById('admin').setAttribute('disabled', 'disabled')
+
+        const validationState = this.validatePersonalDataForm();
+
+        if (!validationState) {
+            this.setState({
+                formInProgress: false,
+                buttonName: "Login"
+            });
+            document.getElementById('admin').removeAttribute('disabled', 'disabled')
+            return false;
+        }
+        const userDetails = this.state;
+    }
+
+    validatePersonalDataForm() {
+        const {
+            adminNo,
+            adminPassword
+        } = this.state;
+
+        if (
+            !adminNo || !adminPassword
+        ) {
+            this.setState({
+                PersonalDataFormError: true,
+                errText: "You can't leave this field(s) empty",
+            });
+            setTimeout(() => {
+                this.setState({
+                    errText: '',
+                });
+            }, 3000);
+            return false;
+        }
+        return true;
+    }
+
     render() {
         return (
             <main>
@@ -18,21 +85,43 @@ class LandingPage extends React.Component {
                 </section>
                 <section id="login_form" className="section__login">
                     <div className="form__div card">
-                    <h3>Admin</h3>
-                        <form id="student_form" method="POST">
-                            <div >
-                                <label htmlFor="staffNo">Staff No.
-                                    <input type="number" name="staffNo" />
+                        <h3>Admin</h3>
+                        <form
+                            onSubmit={event => this.personalDataFormHandler(event)}
+                            id="admin_form"
+                            method="POST"
+                        >
+                            <div>
+                                <label 
+                                    htmlFor="adminNo"
+                                    className={(this.state.PersonalDataFormError && this.state.adminNo === '') ? 'error' : 'registration__label'}
+                                    >Staff No.
+                                    <input
+                                        type="text"
+                                        name="adminNo"
+                                        onChange={event => this.handleInputChange(event)}
+                                        value={this.state.adminNo} />
                                 </label>
                             </div>
                             <div>
-                                <label htmlFor="stuPassword">Password
-                                    <input type="password" name="stuPassword" />
+                                <label
+                                    htmlFor="adminPassword"
+                                    className={(this.state.PersonalDataFormError && this.state.adminPassword === '') ? 'error' : 'registration__label'}
+                                >Password
+                                    <input
+                                        type="password"
+                                        name="adminPassword"
+                                        onChange={event => this.handleInputChange(event)}
+                                        value={this.state.adminPassword} />
                                 </label>
                             </div>
-                            <Link to="/dashboard">
-                                <button type="submit" name="admin" className="button">Login</button>
-                            </Link>
+                            {
+                                this.state.errText &&
+                                <div className="error-box">
+                                    {this.state.errText}
+                                </div>
+                            }
+                            <button type="submit" id="admin" className="button">{this.state.buttonName}</button>
                         </form>
                     </div>
                     <div>

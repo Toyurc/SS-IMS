@@ -108,20 +108,24 @@ class StudentRegistration extends React.Component {
 
     validatePersonalDataForm() {
         const {
+            matric_no,
             first_name,
+            middle_name,
             last_name,
-            date_of_emp,
             phone_number,
             email,
-            dept
+            year_of_adm,
+            year_of_grad,
         } = this.state;
 
         if (!first_name ||
             !last_name ||
-            !date_of_emp ||
+            !middle_name ||
+            !matric_no ||
+            !year_of_adm ||
+            !year_of_grad ||
             !phone_number ||
-            !email ||
-            !dept
+            !email 
         ) {
             this.setState({
                 PersonalDataFormError: true,
