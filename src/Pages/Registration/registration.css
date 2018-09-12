@@ -1,0 +1,27 @@
+.error-box {
+    color: red;
+    border: 1px solid red;
+    background-color: transparent;
+}
+
+.error {
+    display: block;
+    color: red;
+}
+
+.registration__label {
+    display: block;
+    color: black;
+}
+.registration__div {
+    margin: 4px;
+}
+
+form {
+    padding: 48px 24px;
+    margin: 0 auto;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    border: .5px #28b485 solid;
+}
