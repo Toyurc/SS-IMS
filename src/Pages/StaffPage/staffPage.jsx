@@ -126,7 +126,7 @@ class StaffPage extends React.Component {
                                 <button type="submit"  id="stfSubmit" className="button">{this.state.buttonName}</button>
                         </form>
                     </div>
-                    <div>
+                    <div className="form__div">
                         <p>
                             <Link to="/students">Click here Student Portal</Link>
                         </p>

@@ -138,7 +138,6 @@ class StudentRegistration extends React.Component {
             }, 3000);
             return false;
         }
-
         return true;
     }
 

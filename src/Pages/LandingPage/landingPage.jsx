@@ -1,6 +1,7 @@
 import React from 'react';
 import './landingPage.css';
-import { Link } from 'react-router-dom';
+import {Link} from 'react-router-dom';
+import Axios from 'axios';
 class LandingPage extends React.Component {
     constructor(props) {
         super(props);
@@ -11,58 +12,60 @@ class LandingPage extends React.Component {
             PersonalDataFormError: false,
             buttonName: 'Login'
         }
-        this.handleInputChange = this.handleInputChange.bind(this);
+        this.handleInputChange = this
+            .handleInputChange
+            .bind(this);
     }
 
     handleInputChange(event) {
         const name = event.target.name;
         let value = event.target.value;
 
-        this.setState({
-            [name]: value,
-        });
+        this.setState({[name]: value});
     }
 
     personalDataFormHandler(event) {
         event.preventDefault();
         console.log(this.state)
-        this.setState({
-            formInProgress: true,
-            buttonName: "In Progress..."
-        });
+        this.setState({formInProgress: true, buttonName: "In Progress..."});
 
-        document.getElementById('admin').setAttribute('disabled', 'disabled')
+        document
+            .getElementById('admin')
+            .setAttribute('disabled', 'disabled')
 
         const validationState = this.validatePersonalDataForm();
 
         if (!validationState) {
-            this.setState({
-                formInProgress: false,
-                buttonName: "Login"
-            });
-            document.getElementById('admin').removeAttribute('disabled', 'disabled')
+            this.setState({formInProgress: false, buttonName: "Login"});
+            document
+                .getElementById('admin')
+                .removeAttribute('disabled', 'disabled')
             return false;
         }
         const userDetails = this.state;
+
+        Axios.get('https://csc-group-1a.herokuapp.com/login/students', {
+            params: {
+                username: userDetails.adminNo,
+                password: userDetails.password
+            }
+        })
+            .then(response => {
+                console.log('response', response)
+
+            })
+            .catch(error => {
+                console.log('error', error)
+            });
     }
 
     validatePersonalDataForm() {
-        const {
-            adminNo,
-            adminPassword
-        } = this.state;
+        const {adminNo, adminPassword} = this.state;
 
-        if (
-            !adminNo || !adminPassword
-        ) {
-            this.setState({
-                PersonalDataFormError: true,
-                errText: "You can't leave this field(s) empty",
-            });
+        if (!adminNo || !adminPassword) {
+            this.setState({PersonalDataFormError: true, errText: "You can't leave this field(s) empty"});
             setTimeout(() => {
-                this.setState({
-                    errText: '',
-                });
+                this.setState({errText: ''});
             }, 3000);
             return false;
         }
@@ -89,42 +92,41 @@ class LandingPage extends React.Component {
                         <form
                             onSubmit={event => this.personalDataFormHandler(event)}
                             id="admin_form"
-                            method="POST"
-                        >
+                            method="POST">
                             <div>
-                                <label 
+                                <label
                                     htmlFor="adminNo"
-                                    className={(this.state.PersonalDataFormError && this.state.adminNo === '') ? 'error' : 'registration__label'}
-                                    >Staff No.
+                                    className={(this.state.PersonalDataFormError && this.state.adminNo === '')
+                                    ? 'error'
+                                    : 'registration__label'}>Staff No.
                                     <input
                                         type="text"
                                         name="adminNo"
                                         onChange={event => this.handleInputChange(event)}
-                                        value={this.state.adminNo} />
+                                        value={this.state.adminNo}/>
                                 </label>
                             </div>
                             <div>
                                 <label
                                     htmlFor="adminPassword"
-                                    className={(this.state.PersonalDataFormError && this.state.adminPassword === '') ? 'error' : 'registration__label'}
-                                >Password
+                                    className={(this.state.PersonalDataFormError && this.state.adminPassword === '')
+                                    ? 'error'
+                                    : 'registration__label'}>Password
                                     <input
                                         type="password"
                                         name="adminPassword"
                                         onChange={event => this.handleInputChange(event)}
-                                        value={this.state.adminPassword} />
+                                        value={this.state.adminPassword}/>
                                 </label>
                             </div>
-                            {
-                                this.state.errText &&
-                                <div className="error-box">
-                                    {this.state.errText}
-                                </div>
-                            }
+                            {this.state.errText && <div className="error-box">
+                                {this.state.errText}
+                            </div>
+}
                             <button type="submit" id="admin" className="button">{this.state.buttonName}</button>
                         </form>
                     </div>
-                    <div>
+                    <div className="form__div">
                         <p>
                             <Link to="/staffs">Click here Staff Portal</Link>
                         </p>

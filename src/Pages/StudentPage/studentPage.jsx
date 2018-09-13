@@ -1,6 +1,7 @@
 import React from 'react';
 import './studentPage.css';
 import { Link } from 'react-router-dom';
+import Axios from 'axios';
 class StudentPage extends React.Component {
     constructor(props) {
         super(props);
@@ -44,6 +45,7 @@ class StudentPage extends React.Component {
             return false;
         }
         const userDetails = this.state;
+        
     }
 
     validatePersonalDataForm() {
@@ -126,7 +128,7 @@ class StudentPage extends React.Component {
                             <button type="submit" id="stuSubmit" className="button">{this.state.buttonName}</button>
                         </form>
                     </div>
-                    <div>
+                    <div className="form__div">
                         <p>
                             <Link to="/staffs">Click here Staff Portal</Link>
                         </p>
