@@ -1,6 +1,7 @@
 import React from 'react';
 import './landingPage.css';
-import {Link} from 'react-router-dom';
+import { Link, withRouter} from 'react-router-dom';
+import AxiosInstance from '../../requestClient';
 import Axios from 'axios';
 class LandingPage extends React.Component {
     constructor(props) {
@@ -10,7 +11,9 @@ class LandingPage extends React.Component {
             adminPassword: '',
             formInProgress: false,
             PersonalDataFormError: false,
-            buttonName: 'Login'
+            buttonName: 'Login',
+            success: '',
+            errText: ''
         }
         this.handleInputChange = this
             .handleInputChange
@@ -21,13 +24,13 @@ class LandingPage extends React.Component {
         const name = event.target.name;
         let value = event.target.value;
 
-        this.setState({[name]: value});
+        this.setState({ [name]: value });
     }
 
     personalDataFormHandler(event) {
         event.preventDefault();
         console.log(this.state)
-        this.setState({formInProgress: true, buttonName: "In Progress..."});
+        this.setState({ formInProgress: true, buttonName: "In Progress..." });
 
         document
             .getElementById('admin')
@@ -36,36 +39,68 @@ class LandingPage extends React.Component {
         const validationState = this.validatePersonalDataForm();
 
         if (!validationState) {
-            this.setState({formInProgress: false, buttonName: "Login"});
+            this.setState({ formInProgress: false, buttonName: "Login" });
             document
                 .getElementById('admin')
                 .removeAttribute('disabled', 'disabled')
             return false;
         }
         const userDetails = this.state;
+        const BASE_URL = 'https://csc-group-1a.herokuapp.com/';
 
-        Axios.get('https://csc-group-1a.herokuapp.com/login/students', {
-            params: {
+        // AxiosInstance.post('login/staffs', {
+        //     // username: userDetails.adminNo,
+        //     // password: userDetails.adminPassword
+        // })
+        // .then(response => {
+        //     console.log('reponse', response)
+        // })
+        // .catch(error => {
+        //     console.log('error', error)
+        // })
+
+        Axios.post(BASE_URL + 'login/staffs', {}, {
+            auth: {
                 username: userDetails.adminNo,
-                password: userDetails.password
+                password: userDetails.adminPassword
             }
         })
             .then(response => {
-                console.log('response', response)
-
+                console.log('reponse', response)
+                if (response.status === 200 && response.statusText === 'OK') {
+                    this.setState({ formInProgress: false, buttonName: "Login", success: 'Login Successful' });
+                    setTimeout(() => {
+                        this.setState({ success: '' });
+                    }, 2500);
+                    document
+                        .getElementById('admin')
+                        .removeAttribute('disabled', 'disabled');
+                    this.context.router.history.push('/dashbaord');
+                }
             })
             .catch(error => {
                 console.log('error', error)
-            });
+                this.setState({
+                    errText: 'An error occured, pls make usre your staff id and password are valid',
+                    buttonName: "Login"
+                })
+                setTimeout(() => {
+                    this.setState({ errText: '' });
+                }, 3000);
+                document
+                    .getElementById('admin')
+                    .removeAttribute('disabled', 'disabled')
+            })
+
     }
 
     validatePersonalDataForm() {
-        const {adminNo, adminPassword} = this.state;
+        const { adminNo, adminPassword } = this.state;
 
         if (!adminNo || !adminPassword) {
-            this.setState({PersonalDataFormError: true, errText: "You can't leave this field(s) empty"});
+            this.setState({ PersonalDataFormError: true, errText: "You can't leave this field(s) empty" });
             setTimeout(() => {
-                this.setState({errText: ''});
+                this.setState({ errText: '' });
             }, 3000);
             return false;
         }
@@ -94,35 +129,40 @@ class LandingPage extends React.Component {
                             id="admin_form"
                             method="POST">
                             <div>
+                                {
+                                    this.state.success && <div className="success-box">
+                                        {this.state.success}
+                                    </div>
+                                }
                                 <label
                                     htmlFor="adminNo"
                                     className={(this.state.PersonalDataFormError && this.state.adminNo === '')
-                                    ? 'error'
-                                    : 'registration__label'}>Staff No.
+                                        ? 'error'
+                                        : 'registration__label'}>Staff No.
                                     <input
                                         type="text"
                                         name="adminNo"
                                         onChange={event => this.handleInputChange(event)}
-                                        value={this.state.adminNo}/>
+                                        value={this.state.adminNo} />
                                 </label>
                             </div>
                             <div>
                                 <label
                                     htmlFor="adminPassword"
                                     className={(this.state.PersonalDataFormError && this.state.adminPassword === '')
-                                    ? 'error'
-                                    : 'registration__label'}>Password
+                                        ? 'error'
+                                        : 'registration__label'}>Password
                                     <input
                                         type="password"
                                         name="adminPassword"
                                         onChange={event => this.handleInputChange(event)}
-                                        value={this.state.adminPassword}/>
+                                        value={this.state.adminPassword} />
                                 </label>
                             </div>
                             {this.state.errText && <div className="error-box">
                                 {this.state.errText}
                             </div>
-}
+                            }
                             <button type="submit" id="admin" className="button">{this.state.buttonName}</button>
                         </form>
                     </div>
@@ -139,4 +179,4 @@ class LandingPage extends React.Component {
         )
     }
 }
-export default LandingPage;
+export default withRouter(LandingPage);
