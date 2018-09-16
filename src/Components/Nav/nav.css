@@ -1,0 +1,14 @@
+.nav {
+    background-color: black;
+    padding: 2px 8px;
+    text-decoration: none;
+    font-size: large;
+    font-weight: bold;
+    letter-spacing: .8px;
+    cursor: pointer;
+    height: 10vh;
+}
+.log-out {
+    float: right;
+    color: whitesmoke;
+}

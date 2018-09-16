@@ -1,8 +1,8 @@
 import React from 'react';
 import './landingPage.css';
-import { Link, withRouter} from 'react-router-dom';
-import AxiosInstance from '../../requestClient';
+import { Link } from 'react-router-dom';
 import Axios from 'axios';
+import {BASE_URL} from '../../config';
 class LandingPage extends React.Component {
     constructor(props) {
         super(props);
@@ -29,7 +29,6 @@ class LandingPage extends React.Component {
 
     personalDataFormHandler(event) {
         event.preventDefault();
-        console.log(this.state)
         this.setState({ formInProgress: true, buttonName: "In Progress..." });
 
         document
@@ -46,19 +45,6 @@ class LandingPage extends React.Component {
             return false;
         }
         const userDetails = this.state;
-        const BASE_URL = 'https://csc-group-1a.herokuapp.com/';
-
-        // AxiosInstance.post('login/staffs', {
-        //     // username: userDetails.adminNo,
-        //     // password: userDetails.adminPassword
-        // })
-        // .then(response => {
-        //     console.log('reponse', response)
-        // })
-        // .catch(error => {
-        //     console.log('error', error)
-        // })
-
         Axios.post(BASE_URL + 'login/staffs', {}, {
             auth: {
                 username: userDetails.adminNo,
@@ -66,17 +52,17 @@ class LandingPage extends React.Component {
             }
         })
             .then(response => {
-                console.log('reponse', response)
                 if (response.status === 200 && response.statusText === 'OK') {
+                    document
+                        .getElementById('admin')
+                        .removeAttribute('disabled', 'disabled');
+                    sessionStorage.setItem('access-token', response.data.token);
                     this.setState({ formInProgress: false, buttonName: "Login", success: 'Login Successful' });
                     setTimeout(() => {
                         this.setState({ success: '' });
                     }, 2500);
-                    document
-                        .getElementById('admin')
-                        .removeAttribute('disabled', 'disabled');
-                    this.context.router.history.push('/dashbaord');
                 }
+                this.props.history.push('/dashboard');
             })
             .catch(error => {
                 console.log('error', error)
@@ -91,7 +77,6 @@ class LandingPage extends React.Component {
                     .getElementById('admin')
                     .removeAttribute('disabled', 'disabled')
             })
-
     }
 
     validatePersonalDataForm() {
@@ -179,4 +164,4 @@ class LandingPage extends React.Component {
         )
     }
 }
-export default withRouter(LandingPage);
+export default LandingPage;

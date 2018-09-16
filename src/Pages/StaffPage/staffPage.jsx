@@ -1,6 +1,8 @@
 import React from 'react';
 import './staffPage.css';
 import { Link } from 'react-router-dom';
+import Axios from 'axios';
+import {BASE_URL} from '../../config'
 class StaffPage extends React.Component {
     constructor(props) {
         super(props);
@@ -44,7 +46,40 @@ class StaffPage extends React.Component {
             return false;
         }
         const userDetails = this.state;
+        Axios.post(BASE_URL + 'login/staffs', {}, {
+            auth: {
+                username: userDetails.staffNo,
+                password: userDetails.stfPassword
+            }
+        })
+            .then(response => {
+                if (response.status === 200 && response.statusText === 'OK') {
+                    document
+                        .getElementById('stfSubmit')
+                        .removeAttribute('disabled', 'disabled');
+                    sessionStorage.setItem('access-token', response.data.token);
+                    this.setState({ formInProgress: false, buttonName: "Login", success: 'Login Successful' });
+                    setTimeout(() => {
+                        this.setState({ success: '' });
+                    }, 2500);
+                }
+                this.props.history.push('/dashboard');
+            })
+            .catch(error => {
+                console.log('error', error)
+                this.setState({
+                    errText: 'An error occured, pls make usre your staff id and password are valid',
+                    buttonName: "Login"
+                })
+                setTimeout(() => {
+                    this.setState({ errText: '' });
+                }, 3000);
+                document
+                    .getElementById('stfSubmit')
+                    .removeAttribute('disabled', 'disabled')
+            })
     }
+    
 
     validatePersonalDataForm() {
         const {
