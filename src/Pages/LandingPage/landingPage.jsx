@@ -19,6 +19,9 @@ class LandingPage extends React.Component {
             .handleInputChange
             .bind(this);
     }
+    componentWillMount() {
+        sessionStorage.clear();
+    }
 
     handleInputChange(event) {
         const name = event.target.name;
@@ -60,9 +63,9 @@ class LandingPage extends React.Component {
                     this.setState({ formInProgress: false, buttonName: "Login", success: 'Login Successful' });
                     setTimeout(() => {
                         this.setState({ success: '' });
+                        this.props.history.push('/dashboard');
                     }, 2500);
                 }
-                this.props.history.push('/dashboard');
             })
             .catch(error => {
                 console.log('error', error)

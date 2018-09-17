@@ -2,7 +2,7 @@ import React from 'react';
 import './staffPage.css';
 import { Link } from 'react-router-dom';
 import Axios from 'axios';
-import {BASE_URL} from '../../config'
+import { BASE_URL } from '../../config'
 class StaffPage extends React.Component {
     constructor(props) {
         super(props);
@@ -11,11 +11,16 @@ class StaffPage extends React.Component {
             stfPassword: '',
             formInProgress: false,
             PersonalDataFormError: false,
-            buttonName: 'Login'
+            buttonName: 'Login',
+            success: ''
         }
         this.handleInputChange = this.handleInputChange.bind(this);
     }
 
+    componentWillMount() {
+        sessionStorage.clear();
+    } 
+    
     handleInputChange(event) {
         const name = event.target.name;
         let value = event.target.value;
@@ -27,7 +32,6 @@ class StaffPage extends React.Component {
 
     personalDataFormHandler(event) {
         event.preventDefault();
-        console.log(this.state)
         this.setState({
             formInProgress: true,
             buttonName: "In Progress..."
@@ -61,9 +65,9 @@ class StaffPage extends React.Component {
                     this.setState({ formInProgress: false, buttonName: "Login", success: 'Login Successful' });
                     setTimeout(() => {
                         this.setState({ success: '' });
+                        this.props.history.push(`/staffs/${userDetails.staffNo}`, { staffNo: userDetails.staffNo });
                     }, 2500);
                 }
-                this.props.history.push('/dashboard');
             })
             .catch(error => {
                 console.log('error', error)
@@ -79,7 +83,7 @@ class StaffPage extends React.Component {
                     .removeAttribute('disabled', 'disabled')
             })
     }
-    
+
 
     validatePersonalDataForm() {
         const {
@@ -112,7 +116,7 @@ class StaffPage extends React.Component {
                         <div className="header__text-box">
                             <h1 className="heading-primary">
                                 <span className="heading-primary--main">Welcome</span>
-                                <span className="heading-primary--sub">Staff and Students</span>
+                                <span className="heading-primary--sub">Staff</span>
                             </h1>
                             <h3 className="heading-primary--sub">Login With your details below</h3>
                         </div>
@@ -127,6 +131,11 @@ class StaffPage extends React.Component {
                             method="POST"
                         >
                             <div>
+                                {
+                                    this.state.success && <div className="success-box">
+                                        {this.state.success}
+                                    </div>
+                                }
                                 <label
                                     htmlFor="staffNo"
                                     className={(this.state.PersonalDataFormError && this.state.staffNo === '') ? 'error' : 'registration__label'}
@@ -158,7 +167,7 @@ class StaffPage extends React.Component {
                                     {this.state.errText}
                                 </div>
                             }
-                                <button type="submit"  id="stfSubmit" className="button">{this.state.buttonName}</button>
+                            <button type="submit" id="stfSubmit" className="button">{this.state.buttonName}</button>
                         </form>
                     </div>
                     <div className="form__div">

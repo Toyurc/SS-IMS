@@ -1,9 +1,10 @@
 import React from 'react';
 import './studentPage.css';
-import { Link } from 'react-router-dom';
 import Axios from 'axios';
 import ReactTable from "react-table";
 import 'react-table/react-table.css';
+import NavBar from '../../Components/Nav';
+import { Redirect } from 'react-router-dom';
 
 class studentDetailsPage extends React.Component {
     constructor(props) {
@@ -13,24 +14,6 @@ class studentDetailsPage extends React.Component {
             studentDetails: [],
         }
     }
-    // componentWillMount() {
-    //     this.getStaff();
-    // }
-
-    // getStaff() {
-    //     Axios
-    //         .get('https://cors-anywhere.herokuapp.com/https://csc-group-1a.herokuapp.com/students')
-    //         .then(resp => {
-    //             console.log('resp', resp.data.students);
-    //             this.setState = ({
-    //                 students: resp.data.students,
-    //             })
-    //             console.log('student', this.state.students);
-    //         })
-    //         .catch(err => {
-    //             console.log('error', err)
-    //         })
-    //     }
 
     columns() {
         return [
@@ -85,72 +68,76 @@ class studentDetailsPage extends React.Component {
     }
 
     render() {
+        let accessToken = sessionStorage.getItem('access-token');
         return (
-            <div>
-                <h2>Student List</h2>
-                <ReactTable
-                    className={'-striped text-align '}
-                    columns={this.columns()}
-                    defaultPageSize={10}
-                    getTheadProps={(state, rowInfo, column) => {
-                        return {
-                            style: {
-                                background: "#FFF",
-                                color: "#000",
-                                border: "30px",
-                            }
-                        };
-                    }}
-                    data={this.state.students} // should default to []
-                    onFetchData={(state, instance) => {
-                        // show the loading overlay
-                        this.setState({ loading: true })
-                        // fetch your data
-                        Axios.get('https://cors-anywhere.herokuapp.com/https://csc-group-1a.herokuapp.com/students')
-                            .then((res) => {
-                                // Update react-table
-                                this.setState({
-                                    students: res.data.students,
+            accessToken ?
+                <div>
+                    <NavBar />
+                    <h2>Student List</h2>
+                    <ReactTable
+                        className={'-striped text-align '}
+                        columns={this.columns()}
+                        defaultPageSize={10}
+                        getTheadProps={(state, rowInfo, column) => {
+                            return {
+                                style: {
+                                    background: "#FFF",
+                                    color: "#000",
+                                    border: "30px",
+                                }
+                            };
+                        }}
+                        data={this.state.students} // should default to []
+                        onFetchData={(state, instance) => {
+                            // show the loading overlay
+                            this.setState({ loading: true })
+                            // fetch your data
+                            Axios.get('https://cors-anywhere.herokuapp.com/https://csc-group-1a.herokuapp.com/students')
+                                .then((res) => {
+                                    // Update react-table
+                                    this.setState({
+                                        students: res.data.students,
+                                    })
                                 })
-                            })
                             console.log('state', state)
-                    }}
-                    SubComponent={
-                        row => {
-                            return (
-                                <ReactTable
-                                    className={'-striped text-align '}
-                                    columns={this.detailsColumn()}
-                                    defaultPageSize={1}
-                                    getTheadProps={(state, rowInfo, column) => {
-                                        return {
-                                            style: {
-                                                background: "#FFF",
-                                                color: "#000",
-                                                border: "30px",
-                                            }
-                                        };
-                                    }}
-                                    data={this.state.studentDetails} // should default to []
-                                    onFetchData={(state, instance) => {
-                                        // show the loading overlay
-                                        this.setState({ loading: true })
-                                        // fetch your data
-                                        Axios.get('https://cors-anywhere.herokuapp.com/https://csc-group-1a.herokuapp.com/students/')
-                                            .then((res) => {
-                                                // Update react-table
-                                                this.setState({
-                                                    studentDetails: res.data.students,
+                        }}
+                        SubComponent={
+                            row => {
+                                return (
+                                    <ReactTable
+                                        className={'-striped text-align '}
+                                        columns={this.detailsColumn()}
+                                        defaultPageSize={1}
+                                        getTheadProps={(state, rowInfo, column) => {
+                                            return {
+                                                style: {
+                                                    background: "#FFF",
+                                                    color: "#000",
+                                                    border: "30px",
+                                                }
+                                            };
+                                        }}
+                                        data={this.state.studentDetails} // should default to []
+                                        onFetchData={(state, instance) => {
+                                            // show the loading overlay
+                                            this.setState({ loading: true })
+                                            // fetch your data
+                                            Axios.get('https://cors-anywhere.herokuapp.com/https://csc-group-1a.herokuapp.com/students/')
+                                                .then((res) => {
+                                                    // Update react-table
+                                                    this.setState({
+                                                        studentDetails: res.data.students,
+                                                    })
                                                 })
-                                            })
-                                    }}
-                                />
-                            );
+                                        }}
+                                    />
+                                );
+                            }
                         }
-                    }
-                />
+                    />
 
-            </div>
+                </div>
+                : <Redirect to="/students" />
         )
     }
 }

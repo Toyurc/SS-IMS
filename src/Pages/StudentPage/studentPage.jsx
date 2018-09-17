@@ -1,6 +1,7 @@
 import React from 'react';
 import './studentPage.css';
 import { Link } from 'react-router-dom';
+import { BASE_URL } from '../../config';
 import Axios from 'axios';
 class StudentPage extends React.Component {
     constructor(props) {
@@ -10,9 +11,14 @@ class StudentPage extends React.Component {
             stuPassword: '',
             formInProgress: false,
             PersonalDataFormError: false,
-            buttonName: 'Login'
+            buttonName: 'Login',
+            success: ''
         }
         this.handleInputChange = this.handleInputChange.bind(this);
+    }
+
+    componentWillMount() {
+        sessionStorage.clear();
     }
 
     handleInputChange(event) {
@@ -26,7 +32,6 @@ class StudentPage extends React.Component {
 
     personalDataFormHandler(event) {
         event.preventDefault();
-        console.log(this.state)
         this.setState({
             formInProgress: true,
             buttonName: "In Progress..."
@@ -45,7 +50,38 @@ class StudentPage extends React.Component {
             return false;
         }
         const userDetails = this.state;
-        
+        Axios.post(BASE_URL + 'login/students', {}, {
+            auth: {
+                username: userDetails.matricNo,
+                password: userDetails.stuPassword
+            }
+        })
+            .then(response => {
+                if (response.status === 200 && response.statusText === 'OK') {
+                    document
+                        .getElementById('stuSubmit')
+                        .removeAttribute('disabled', 'disabled');
+                    sessionStorage.setItem('access-token', response.data.token);
+                    this.setState({ formInProgress: false, buttonName: "Login", success: 'Login Successful' });
+                    setTimeout(() => {
+                        this.setState({ success: '' });
+                        this.props.history.push(`/students/${userDetails.matricNo}`, { matricNo: userDetails.matricNo });
+                    }, 2500);
+                }
+            })
+            .catch(error => {
+                console.log('error', error)
+                this.setState({
+                    errText: 'An error occured, pls make usre your matric no. and password are valid',
+                    buttonName: "Login"
+                })
+                setTimeout(() => {
+                    this.setState({ errText: '' });
+                }, 3000);
+                document
+                    .getElementById('stuSubmit')
+                    .removeAttribute('disabled', 'disabled')
+            })
     }
 
     validatePersonalDataForm() {
@@ -94,6 +130,11 @@ class StudentPage extends React.Component {
                             method="POST"
                         >
                             <div>
+                                {
+                                    this.state.success && <div className="success-box">
+                                        {this.state.success}
+                                    </div>
+                                }
                                 <label
                                     htmlFor="matricNo"
                                     className={(this.state.PersonalDataFormError && this.state.matricNo === '') ? 'error' : 'registration__label'}

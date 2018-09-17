@@ -1,6 +1,6 @@
 import React from 'react';
 import './dashboard.css';
-import { Link } from 'react-router-dom';
+import { Link,Redirect } from 'react-router-dom';
 import NavBar from '../../Components/Nav';
 
 const Board = () => (
@@ -27,11 +27,14 @@ const Board = () => (
 )
 class Dashboard extends React.Component {
     render() {
+        let accessToken = sessionStorage.getItem('access-token');
         return (
+            accessToken ?
             <React.Fragment>
                 <NavBar />
                 <Board />
             </React.Fragment>
+            : <Redirect to='/'/>
         )
     }
 }

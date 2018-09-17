@@ -1,6 +1,6 @@
 .nav {
     background-color: black;
-    padding: 2px 8px;
+    padding: 8px;
     text-decoration: none;
     font-size: large;
     font-weight: bold;
@@ -11,4 +11,5 @@
 .log-out {
     float: right;
     color: whitesmoke;
+    margin-top: 4px;
 }
