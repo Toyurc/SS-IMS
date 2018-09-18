@@ -5,6 +5,9 @@ import ReactTable from "react-table";
 import 'react-table/react-table.css';
 import NavBar from '../../Components/Nav';
 import { Redirect } from 'react-router-dom';
+import AxiosInstance from '../../requestClient'
+import { BASE_URL } from '../../config';
+
 
 class studentDetailsPage extends React.Component {
     constructor(props) {
@@ -92,7 +95,7 @@ class studentDetailsPage extends React.Component {
                             // show the loading overlay
                             this.setState({ loading: true })
                             // fetch your data
-                            Axios.get('https://cors-anywhere.herokuapp.com/https://csc-group-1a.herokuapp.com/students')
+                            AxiosInstance.get(BASE_URL +'students')
                                 .then((res) => {
                                     // Update react-table
                                     this.setState({

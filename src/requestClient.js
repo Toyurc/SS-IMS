@@ -15,6 +15,6 @@ const AxiosInstance = Axios.create({
     
   });
   
-  AxiosInstance.defaults.headers.common['Authorization'] = AUTH_TOKEN;
+  AxiosInstance.defaults.headers.common['x-access-token'] = AUTH_TOKEN;
 
   export default AxiosInstance;

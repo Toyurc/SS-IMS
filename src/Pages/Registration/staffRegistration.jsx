@@ -1,6 +1,8 @@
 import React from 'react';
 import './registration.css';
 import { Link } from 'react-router-dom';
+import AxiosInstance from '../../requestClient'
+import { BASE_URL } from '../../config';
 
 const RegistrationForm = [
     {
@@ -96,6 +98,22 @@ class StaffRegistration extends React.Component {
             return false;
         }
         const userDetails = this.state;
+
+        AxiosInstance.post(BASE_URL + 'staffs',{
+            staff_id:userDetails.staff_no,
+	        first_name:userDetails.first_name,
+	        last_name:userDetails.last_name,
+	        doe:userDetails.date_of_emp,
+	        phone_number:userDetails.phone_number,
+	        email_address:userDetails.email,
+	        dept:userDetails.dept
+        })
+        .then(response => {
+            console.log(response)
+        })
+        .catch(error => {
+            console.log(error)
+        })
     }
 
 

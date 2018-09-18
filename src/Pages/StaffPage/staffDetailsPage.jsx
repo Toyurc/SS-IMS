@@ -5,6 +5,7 @@ import Axios from 'axios';
 import ReactTable from "react-table";
 import 'react-table/react-table.css';
 import { Redirect } from 'react-router-dom'
+import { BASE_URL } from '../../config';
 
 class StaffDetailsPage extends React.Component {
     constructor(props) {
@@ -53,7 +54,7 @@ class StaffDetailsPage extends React.Component {
                             // show the loading overlay
                             this.setState({ loading: true })
                             // fetch your data
-                            Axios.get('https://cors-anywhere.herokuapp.com/https://csc-group-1a.herokuapp.com/staffs')
+                            Axios.get( BASE_URL +'staffs')
                                 .then((res) => {
                                     // Update react-table
                                     this.setState({

@@ -1,6 +1,9 @@
 import React from 'react';
 import './registration.css';
 import { Link } from 'react-router-dom';
+import AxiosInstance from '../../requestClient';
+import { BASE_URL } from '../../config';
+
 
 const RegistrationForm = [
     {
@@ -41,15 +44,17 @@ const RegistrationForm = [
     },
     {
         label: 'Year of Admission',
-        min: null,
+        min: 1900,
+        max:2099,
         name: 'year_of_adm',
-        type: 'date',
+        type: 'number',
     },
     {
         label: 'Year of Graduation',
-        min: null,
+        min: 1900,
+        max:2099,
         name: 'year_of_grad',
-        type: 'date',
+        type: 'number',
     }
 ]
 class StudentRegistration extends React.Component {
@@ -103,8 +108,24 @@ class StudentRegistration extends React.Component {
             return false;
         }
         const userDetails = this.state;
-    }
 
+        AxiosInstance.post(BASE_URL + 'students',{
+            matric:userDetails.matric_no,
+	first_name:userDetails.first_name,
+	last_name:userDetails.last_name,
+	middle_name:userDetails.middle_name,
+	phone_number:userDetails.phone_number,
+	email_address:userDetails.email_address,
+	ad_year:userDetails.year_of_adm,
+	grad_year:userDetails.year_of_grad
+        })
+        .then(response => {
+            console.log(response)
+        })
+        .catch(error => {
+            console.log(error)
+        })
+    }
 
     validatePersonalDataForm() {
         const {
@@ -160,6 +181,7 @@ class StudentRegistration extends React.Component {
                                     name={form.name}
                                     type={form.type}
                                     min={form.min}
+                                    max={form.max}
                                     onChange={event => this.handleInputChange(event)}
                                     value={this.state[form.name]}
                                 />
