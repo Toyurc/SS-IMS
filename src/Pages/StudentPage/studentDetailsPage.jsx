@@ -1,6 +1,5 @@
 import React from 'react';
 import './studentPage.css';
-import Axios from 'axios';
 import ReactTable from "react-table";
 import 'react-table/react-table.css';
 import NavBar from '../../Components/Nav';
@@ -22,12 +21,12 @@ class studentDetailsPage extends React.Component {
         return [
             {
                 Header: 'Matric No.',
-                accessor: 'matric' // String-based value accessors!
+                accessor: 'matric' 
 
             },
             {
                 Header: 'Student Name',
-                accessor: 'name' // String-based value accessors!
+                accessor: 'name' 
 
             },
         ]
@@ -90,10 +89,8 @@ class studentDetailsPage extends React.Component {
                                 }
                             };
                         }}
-                        data={this.state.students} // should default to []
+                        data={this.state.students}
                         onFetchData={(state, instance) => {
-                            // show the loading overlay
-                            this.setState({ loading: true })
                             // fetch your data
                             AxiosInstance.get(BASE_URL +'students')
                                 .then((res) => {
@@ -102,11 +99,12 @@ class studentDetailsPage extends React.Component {
                                         students: res.data.students,
                                     })
                                 })
-                            console.log('state', state)
                         }}
                         SubComponent={
                             row => {
                                 return (
+                                    <div>
+                                        <h1>Holla Amigos</h1>
                                     <ReactTable
                                         className={'-striped text-align '}
                                         columns={this.detailsColumn()}
@@ -120,27 +118,27 @@ class studentDetailsPage extends React.Component {
                                                 }
                                             };
                                         }}
-                                        data={this.state.studentDetails} // should default to []
+                                        data={this.state.studentDetails} 
                                         onFetchData={(state, instance) => {
-                                            // show the loading overlay
-                                            this.setState({ loading: true })
                                             // fetch your data
-                                            Axios.get('https://cors-anywhere.herokuapp.com/https://csc-group-1a.herokuapp.com/students/')
+                                            AxiosInstance.get(BASE_URL + `students/${row.original.matric}`)
                                                 .then((res) => {
+                                                    console.log(res)
                                                     // Update react-table
                                                     this.setState({
-                                                        studentDetails: res.data.students,
+                                                        studentDetails: res.data,
                                                     })
                                                 })
                                         }}
                                     />
+                                    </div>
                                 );
                             }
                         }
                     />
 
                 </div>
-                : <Redirect to="/students" />
+                : <Redirect to="/" />
         )
     }
 }

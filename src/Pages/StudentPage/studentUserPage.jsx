@@ -2,7 +2,8 @@ import React from 'react';
 import './studentPage.css';
 import AxiosInstance from '../../requestClient';
 import { BASE_URL } from '../../config';
-import NavBar from '../../Components/Nav'
+import NavBar from '../../Components/Nav';
+import {Redirect} from 'react-router-dom';
 
 
 class StudentUserPage extends React.Component {
@@ -30,7 +31,9 @@ class StudentUserPage extends React.Component {
     }
 
     render() {
+        let accessToken = sessionStorage.getItem('access-token');
         return (
+            accessToken ?
             <React.Fragment>
                 <NavBar/>
                 <div>
@@ -44,7 +47,7 @@ class StudentUserPage extends React.Component {
             <p>Graduation Year: {this.state.studentDetails.graduation_year}</p>
         </div>
             </React.Fragment>
-        
+            : <Redirect to="/students" />
         )
     }
 }

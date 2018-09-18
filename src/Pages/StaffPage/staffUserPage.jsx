@@ -3,6 +3,7 @@ import './staffPage.css';
 import AxiosInstance from '../../requestClient';
 import { BASE_URL } from '../../config';
 import NavBar from '../../Components/Nav'
+import Redirect from 'react-router-dom/Redirect';
 
 
 class StaffUserPage extends React.Component {
@@ -31,7 +32,9 @@ class StaffUserPage extends React.Component {
     }
 
     render() {
+        let accessToken = sessionStorage.getItem('access-token');
         return (
+            accessToken ?
             <React.Fragment>
                 <NavBar/>
                 <div>
@@ -44,7 +47,7 @@ class StaffUserPage extends React.Component {
             <p>Date Of Employment: {this.state.staffDetails.date_of_employment}</p>
         </div>
             </React.Fragment>
-        
+        : <Redirect to="/staffs"/>
         )
     }
 }

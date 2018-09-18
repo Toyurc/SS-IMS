@@ -6,24 +6,26 @@ import ReactTable from "react-table";
 import 'react-table/react-table.css';
 import { Redirect } from 'react-router-dom'
 import { BASE_URL } from '../../config';
+import AxiosInstance from '../../requestClient'
 
 class StaffDetailsPage extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             staffs: [],
+            staffDetails: []
         }
     }
     columns() {
         return [
             {
                 Header: 'Staff No.',
-                accessor: 'staff_id' // String-based value accessors!
+                accessor: 'staff_id' 
 
             },
             {
                 Header: 'Staff Name',
-                accessor: 'staff_name' // String-based value accessors!
+                accessor: 'staff_name'
 
             },
         ]
@@ -62,9 +64,44 @@ class StaffDetailsPage extends React.Component {
                                     })
                                 })
                         }}
+                        SubComponent={
+                            row => {
+                                return (
+                                    <div>
+                                        <h1>Holla Amigos</h1>
+                                    <ReactTable
+                                        className={'-striped text-align '}
+                                        columns={this.detailsColumn()}
+                                        defaultPageSize={1}
+                                        getTheadProps={(state, rowInfo, column) => {
+                                            return {
+                                                style: {
+                                                    background: "#FFF",
+                                                    color: "#000",
+                                                    border: "30px",
+                                                }
+                                            };
+                                        }}
+                                        data={this.state.studentDetails} 
+                                        onFetchData={(state, instance) => {
+                                            // fetch your data
+                                            AxiosInstance.get(BASE_URL + `staffs/${row.original.staff_id}`)
+                                                .then((res) => {
+                                                    console.log(res)
+                                                    // Update react-table
+                                                    this.setState({
+                                                        staffDetails: res.data,
+                                                    })
+                                                })
+                                        }}
+                                    />
+                                    </div>
+                                );
+                            }
+                        }
                     />
                 </div>
-                : <Redirect to="/staffs" />
+                : <Redirect to="/" />
         )
     }
 }

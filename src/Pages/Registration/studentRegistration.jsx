@@ -1,6 +1,5 @@
 import React from 'react';
 import './registration.css';
-import { Link } from 'react-router-dom';
 import AxiosInstance from '../../requestClient';
 import { BASE_URL } from '../../config';
 
