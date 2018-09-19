@@ -7,13 +7,11 @@ import { StaffRegistration, StudentRegistration } from './Pages/Registration';
 import { StaffDetailsPage, StaffPage, StaffUserPage } from './Pages/StaffPage';
 import { StudentDetailsPage, StudentPage, StudentUserPage } from './Pages/StudentPage';
 import { Provider } from 'react-redux';
-import  Store  from './Store/store'
 
 
 class App extends Component {
   render() {
     return (
-      <Provider store={Store}>
         <Router>
           <div className="body">
             <Switch>
@@ -31,7 +29,6 @@ class App extends Component {
             </Switch>
           </div>
         </Router>
-      </Provider>
     );
   }
 }
