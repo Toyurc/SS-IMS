@@ -76,7 +76,7 @@ class StaffPage extends React.Component {
                     this.setState({ formInProgress: false, buttonName: "Login", errText: 'You are an admin, pls login on the admin portal' });
                     setTimeout(() => {
                         this.setState({ errText: '' });
-                    }, 2500);
+                    }, 3000);
                 }
             })
             .catch(error => {

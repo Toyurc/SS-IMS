@@ -59,7 +59,7 @@ class LandingPage extends React.Component {
                 document
                     .getElementById('admin')
                     .removeAttribute('disabled', 'disabled');
-                this.setState({formInProgress: true, buttonName: "Login", errText: 'You aren\'t an admin, pls login in on the staff portal '});
+                this.setState({formInProgress: false, buttonName: "Login", errText: 'You aren\'t an admin, pls login in on the staff portal '});
                 setTimeout(() => {
                     this.setState({errText: ''});
                 }, 2500)
@@ -68,7 +68,7 @@ class LandingPage extends React.Component {
                     .getElementById('admin')
                     .removeAttribute('disabled', 'disabled');
                 sessionStorage.setItem('access-token', response.data.token);
-                this.setState({formInProgress: true, buttonName: "Login", success: 'Login Successful'});
+                this.setState({formInProgress: false, buttonName: "Login", success: 'Login Successful'});
                 setTimeout(() => {
                     this.setState({success: ''});
                     this
