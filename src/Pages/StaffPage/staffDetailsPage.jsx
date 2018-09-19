@@ -20,7 +20,7 @@ class StaffDetailsPage extends React.Component {
         return [
             {
                 Header: 'Staff No.',
-                accessor: 'staff_id' 
+                accessor: 'staff_id'
 
             },
             {
@@ -56,7 +56,7 @@ class StaffDetailsPage extends React.Component {
             {
                 Header: 'Email',
                 accessor: 'email_address'
-            },  {
+            }, {
                 Header: 'Department',
                 accessor: 'department'
             },
@@ -88,7 +88,7 @@ class StaffDetailsPage extends React.Component {
                             // show the loading overlay
                             this.setState({ loading: true })
                             // fetch your data
-                            Axios.get( BASE_URL +'staffs')
+                            Axios.get(BASE_URL + 'staffs')
                                 .then((res) => {
                                     // Update react-table
                                     this.setState({
@@ -100,34 +100,34 @@ class StaffDetailsPage extends React.Component {
                             row => {
                                 return (
                                     <div>
-                                    <ReactTable
-                                        className={'-striped text-align '}
-                                        columns={this.detailsColumn()}
-                                        defaultPageSize={1}
-                                        manual
-                                        freezeWhenExpanded={true}
-                                        showPagination={false}
-                                        getTheadProps={(state, rowInfo, column) => {
-                                            return {
-                                                style: {
-                                                    background: "#FFF",
-                                                    color: "#000",
-                                                    border: "30px",
-                                                }
-                                            };
-                                        }}
-                                        data={this.state.staffDetails} 
-                                        onFetchData={(state, instance) => {
-                                            // fetch your data
-                                            AxiosInstance.get(BASE_URL + `staffs/${row.original.staff_id}`)
-                                                .then((res) => {
-                                                    // Update react-table
-                                                    this.setState({
-                                                        staffDetails: res.data,
+                                        <ReactTable
+                                            className={'-striped text-align '}
+                                            columns={this.detailsColumn()}
+                                            defaultPageSize={1}
+                                            manual
+                                            freezeWhenExpanded={true}
+                                            showPagination={false}
+                                            getTheadProps={(state, rowInfo, column) => {
+                                                return {
+                                                    style: {
+                                                        background: "#FFF",
+                                                        color: "#000",
+                                                        border: "30px",
+                                                    }
+                                                };
+                                            }}
+                                            data={this.state.staffDetails}
+                                            onFetchData={(state, instance) => {
+                                                // fetch your data
+                                                AxiosInstance.get(BASE_URL + `staffs/${row.original.staff_id}`)
+                                                    .then((res) => {
+                                                        // Update react-table
+                                                        this.setState({
+                                                            staffDetails: res.data,
+                                                        })
                                                     })
-                                                })
-                                        }}
-                                    />
+                                            }}
+                                        />
                                     </div>
                                 );
                             }

@@ -2,7 +2,7 @@ import React from 'react';
 import './registration.css';
 import AxiosInstance from '../../requestClient';
 import { BASE_URL } from '../../config';
-
+import LoadingOverlay from 'react-loading-overlay';
 
 const RegistrationForm = [
     {
@@ -44,14 +44,14 @@ const RegistrationForm = [
     {
         label: 'Year of Admission',
         min: 1900,
-        max:2099,
+        max: 2099,
         name: 'year_of_adm',
         type: 'number',
     },
     {
         label: 'Year of Graduation',
         min: 1900,
-        max:2099,
+        max: 2099,
         name: 'year_of_grad',
         type: 'number',
     }
@@ -72,7 +72,7 @@ class StudentRegistration extends React.Component {
             errText: '',
             formInProgress: false,
             PersonalDataFormError: false,
-            button_name: 'Register'
+            buttonName: 'Register'
         }
         this.handleInputChange = this.handleInputChange.bind(this);
     }
@@ -91,7 +91,7 @@ class StudentRegistration extends React.Component {
         event.preventDefault();
         this.setState({
             formInProgress: true,
-            button_name: "In Progress..."
+            buttonName: "In Progress..."
         });
 
         document.getElementById('registerButton').setAttribute('disabled', 'disabled')
@@ -101,47 +101,48 @@ class StudentRegistration extends React.Component {
         if (!validationState) {
             this.setState({
                 formInProgress: false,
-                button_name: "Register"
+                buttonName: "Register"
             });
             document.getElementById('registerButton').removeAttribute('disabled', 'disabled')
             return false;
         }
         const userDetails = this.state;
 
-        AxiosInstance.post(BASE_URL + 'students',{
-            matric:userDetails.matric_no,
-	        first_name:userDetails.first_name,
-	        last_name:userDetails.last_name,
-	        middle_name:userDetails.middle_name,
-	        phone_number:userDetails.phone_number,
-	        email_address:userDetails.email,
-	        ad_year:userDetails.year_of_adm,
-            grad_year:userDetails.year_of_grad
+        AxiosInstance.post(BASE_URL + 'students', {
+            matric: userDetails.matric_no,
+            first_name: userDetails.first_name,
+            last_name: userDetails.last_name,
+            middle_name: userDetails.middle_name,
+            phone_number: userDetails.phone_number,
+            email_address: userDetails.email,
+            ad_year: userDetails.year_of_adm,
+            grad_year: userDetails.year_of_grad
         })
-        .then(response => {
-            if (response.status === 200 && response.statusText === 'OK') {
-                document
-                .getElementById('registerButton')
-                .removeAttribute('disabled', 'disabled');
-            this.setState({ formInProgress: false, buttonName: "Register", success: 'Registration Successful' });
-            setTimeout(() => {
-                this.setState({ success: '' });
-                this.props.history.push('/dashboard');
-            }, 2500);
-            }
-        })
-        .catch(error => {
-            this.setState({
-                errText: 'An error occured, pls try again later',
-                buttonName: "Register"
+            .then(response => {
+                if (response.status === 200 && response.statusText === 'OK') {
+                    document
+                        .getElementById('registerButton')
+                        .removeAttribute('disabled', 'disabled');
+                    this.setState({ formInProgress: false, buttonName: "Register", success: 'Registration Successful' });
+                    setTimeout(() => {
+                        this.setState({ success: '' });
+                        this.props.history.push('/dashboard');
+                    }, 2500);
+                }
             })
-            setTimeout(() => {
-                this.setState({ errText: '' });
-            }, 3000);
-            document
-                .getElementById('registerButton')
-                .removeAttribute('disabled', 'disabled')
-        })
+            .catch(error => {
+                this.setState({
+                    errText: 'An error occured, pls try again later',
+                    buttonName: "Register",
+                    formInProgress: false
+                })
+                setTimeout(() => {
+                    this.setState({ errText: '' });
+                }, 3000);
+                document
+                    .getElementById('registerButton')
+                    .removeAttribute('disabled', 'disabled')
+            })
     }
 
     validatePersonalDataForm() {
@@ -163,7 +164,7 @@ class StudentRegistration extends React.Component {
             !year_of_adm ||
             !year_of_grad ||
             !phone_number ||
-            !email 
+            !email
         ) {
             this.setState({
                 PersonalDataFormError: true,
@@ -181,44 +182,50 @@ class StudentRegistration extends React.Component {
 
     render() {
         return (
-            <div>
-                <h2>Student Registration</h2>
-                <form onSubmit={event => this.personalDataFormHandler(event)} method="POST">
-                    {
+            <LoadingOverlay
+                active={this.state.formInProgress}
+                spinner
+                text="Loggin In..."
+            >
+                <div>
+                    <h2>Student Registration</h2>
+                    <form onSubmit={event => this.personalDataFormHandler(event)} method="POST">
+                        {
                             this.state.success && <div className="success-box">
                                 {this.state.success}
                             </div>
-                    }
-                    {
-                        RegistrationForm.map((form, index) => (
-                            <div
-                                key={index}
-                                className="registration__div"
-                            >
-                                <label
-                                    htmlFor={form.name}
-                                    className={(this.state.PersonalDataFormError && this.state[form.name] === '') ? 'error' : 'registration__label'}
-                                >{form.label}</label>
-                                <input
-                                    name={form.name}
-                                    type={form.type}
-                                    min={form.min}
-                                    max={form.max}
-                                    onChange={event => this.handleInputChange(event)}
-                                    value={this.state[form.name]}
-                                />
+                        }
+                        {
+                            RegistrationForm.map((form, index) => (
+                                <div
+                                    key={index}
+                                    className="registration__div"
+                                >
+                                    <label
+                                        htmlFor={form.name}
+                                        className={(this.state.PersonalDataFormError && this.state[form.name] === '') ? 'error' : 'registration__label'}
+                                    >{form.label}</label>
+                                    <input
+                                        name={form.name}
+                                        type={form.type}
+                                        min={form.min}
+                                        max={form.max}
+                                        onChange={event => this.handleInputChange(event)}
+                                        value={this.state[form.name]}
+                                    />
+                                </div>
+                            ))
+                        }
+                        {
+                            this.state.errText &&
+                            <div className="error-box">
+                                {this.state.errText}
                             </div>
-                        ))
-                    }
-                    {
-                        this.state.errText &&
-                        <div className="error-box">
-                            {this.state.errText}
-                        </div>
-                    }
-                    <button id="registerButton" type="submit" >{this.state.button_name}</button>
-                </form>
-            </div>
+                        }
+                        <button id="registerButton" type="submit" >{this.state.buttonName}</button>
+                    </form>
+                </div>
+            </LoadingOverlay>
         )
     }
 }

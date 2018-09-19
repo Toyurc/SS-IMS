@@ -3,6 +3,7 @@ import './studentPage.css';
 import { Link } from 'react-router-dom';
 import { BASE_URL } from '../../config';
 import Axios from 'axios';
+import LoadingOverlay from 'react-loading-overlay'
 class StudentPage extends React.Component {
     constructor(props) {
         super(props);
@@ -72,7 +73,8 @@ class StudentPage extends React.Component {
             .catch(error => {
                 this.setState({
                     errText: 'An error occured, pls make usre your matric no. and password are valid',
-                    buttonName: "Login"
+                    buttonName: "Login",
+                    formInProgress: false
                 })
                 setTimeout(() => {
                     this.setState({ errText: '' });
@@ -108,6 +110,11 @@ class StudentPage extends React.Component {
 
     render() {
         return (
+            <LoadingOverlay
+                active={this.state.formInProgress}
+                spinner
+                text="Loggin In..."
+            >
             <main>
                 <section id="landing_page">
                     <header className="header">
@@ -178,6 +185,7 @@ class StudentPage extends React.Component {
                     </div>
                 </section>
             </main>
+            </LoadingOverlay>
         )
     }
 }

@@ -2,55 +2,68 @@
     display: block;
     width: 100%;
 }
-.staffTable thead, .staffTable tbody {
+
+.staffTable thead,
+.staffTable tbody {
     display: flex;
 }
+
 .staffTable thead {
     background-color: #f2f2f2;
     padding-left: 3vw;
 }
+
 .staffTable thead tr {
     display: flex;
     justify-content: space-between;
     padding: 16px 0;
     width: 100%;
 }
+
 .staffTable thead tr th {
     display: inline-block;
     font-size: 12px;
     text-align: left;
     width: 25%;
 }
+
 @media (min-width: 640px) {
     .staffTable thead tr th {
         font-size: 14px;
-   }
+    }
 }
+
 .staffTable tbody {
     flex-direction: column;
 }
+
 .staffTable tbody tr {
     display: flex;
     justify-content: space-between;
     padding: 16px 0;
     width: 100%;
 }
+
 .staffTable tbody tr td {
     display: inline-block;
     font-size: 12px;
     width: 25%;
 }
+
 @media (min-width: 640px) {
     .staffTable tbody tr td {
         font-size: 14px;
-   }
+    }
 }
+
 .staffTable tbody tr td:first-child {
     padding-left: 3vw;
 }
+
 .staffTable tbody tr:nth-child(even) {
     background-color: #ccc;
 }
+
 h2 {
     text-align: center;
 }
@@ -190,7 +203,8 @@ input[type=number]::-webkit-outer-spin-button {
 }
 
 .button {
-    background-color: #4CAF50; /* Green */
+    background-color: #4CAF50;
+    /* Green */
     border: none;
     color: white;
     padding: 15px 32px;

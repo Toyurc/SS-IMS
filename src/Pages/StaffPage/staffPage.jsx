@@ -3,6 +3,7 @@ import './staffPage.css';
 import { Link } from 'react-router-dom';
 import Axios from 'axios';
 import { BASE_URL } from '../../config'
+import LoadingOverlay from 'react-loading-overlay';
 class StaffPage extends React.Component {
     constructor(props) {
         super(props);
@@ -19,8 +20,8 @@ class StaffPage extends React.Component {
 
     componentWillMount() {
         sessionStorage.clear();
-    } 
-    
+    }
+
     handleInputChange(event) {
         const name = event.target.name;
         let value = event.target.value;
@@ -70,18 +71,19 @@ class StaffPage extends React.Component {
                 }
                 else if (response.status === 200 && response.statusText === 'OK' && response.data.is_admin === true) {
                     document
-                    .getElementById('stfSubmit')
-                    .removeAttribute('disabled', 'disabled');
-                this.setState({ formInProgress: false, buttonName: "Login", errText: 'You are an admin, pls login on the admin portal' });
-                setTimeout(() => {
-                    this.setState({ errText: '' });
-                }, 2500);
+                        .getElementById('stfSubmit')
+                        .removeAttribute('disabled', 'disabled');
+                    this.setState({ formInProgress: false, buttonName: "Login", errText: 'You are an admin, pls login on the admin portal' });
+                    setTimeout(() => {
+                        this.setState({ errText: '' });
+                    }, 2500);
                 }
             })
             .catch(error => {
                 this.setState({
                     errText: 'An error occured, pls make usre your staff id and password are valid',
-                    buttonName: "Login"
+                    buttonName: "Login",
+                    formInProgress: false
                 })
                 setTimeout(() => {
                     this.setState({ errText: '' });
@@ -118,76 +120,82 @@ class StaffPage extends React.Component {
 
     render() {
         return (
-            <main>
-                <section id="landing_page">
-                    <header className="header">
-                        <div className="header__text-box">
-                            <h1 className="heading-primary">
-                                <span className="heading-primary--main">Welcome</span>
-                                <span className="heading-primary--sub">Staff</span>
-                            </h1>
-                            <h3 className="heading-primary--sub">Login With your details below</h3>
-                        </div>
-                    </header>
-                </section>
-                <section id="login_form" className="section__login">
-                    <div className="form__div card">
-                        <h3>Staffs</h3>
-                        <form
-                            onSubmit={event => this.personalDataFormHandler(event)}
-                            id="staff_form"
-                            method="POST"
-                        >
-                            <div>
+            <LoadingOverlay
+                active={this.state.formInProgress}
+                spinner
+                text="Loggin In..."
+            >
+                <main>
+                    <section id="landing_page">
+                        <header className="header">
+                            <div className="header__text-box">
+                                <h1 className="heading-primary">
+                                    <span className="heading-primary--main">Welcome</span>
+                                    <span className="heading-primary--sub">Staff</span>
+                                </h1>
+                                <h3 className="heading-primary--sub">Login With your details below</h3>
+                            </div>
+                        </header>
+                    </section>
+                    <section id="login_form" className="section__login">
+                        <div className="form__div card">
+                            <h3>Staffs</h3>
+                            <form
+                                onSubmit={event => this.personalDataFormHandler(event)}
+                                id="staff_form"
+                                method="POST"
+                            >
+                                <div>
+                                    {
+                                        this.state.success && <div className="success-box">
+                                            {this.state.success}
+                                        </div>
+                                    }
+                                    <label
+                                        htmlFor="staffNo"
+                                        className={(this.state.PersonalDataFormError && this.state.staffNo === '') ? 'error' : 'registration__label'}
+                                    >Staff No.
+                                    <input
+                                            type="text"
+                                            name="staffNo"
+                                            onChange={event => this.handleInputChange(event)}
+                                            value={this.state.staffNo}
+                                        />
+                                    </label>
+                                </div>
+                                <div>
+                                    <label
+                                        htmlFor="stfPassword"
+                                        className={(this.state.PersonalDataFormError && this.state.stfPassword === '') ? 'error' : 'registration__label'}
+                                    >Password
+                                    <input
+                                            type="password"
+                                            name="stfPassword"
+                                            onChange={event => this.handleInputChange(event)}
+                                            value={this.state.stfPassword}
+                                        />
+                                    </label>
+                                </div>
                                 {
-                                    this.state.success && <div className="success-box">
-                                        {this.state.success}
+                                    this.state.errText &&
+                                    <div className="error-box">
+                                        {this.state.errText}
                                     </div>
                                 }
-                                <label
-                                    htmlFor="staffNo"
-                                    className={(this.state.PersonalDataFormError && this.state.staffNo === '') ? 'error' : 'registration__label'}
-                                >Staff No.
-                                    <input
-                                        type="text"
-                                        name="staffNo"
-                                        onChange={event => this.handleInputChange(event)}
-                                        value={this.state.staffNo}
-                                    />
-                                </label>
-                            </div>
-                            <div>
-                                <label
-                                    htmlFor="stfPassword"
-                                    className={(this.state.PersonalDataFormError && this.state.stfPassword === '') ? 'error' : 'registration__label'}
-                                >Password
-                                    <input
-                                        type="password"
-                                        name="stfPassword"
-                                        onChange={event => this.handleInputChange(event)}
-                                        value={this.state.stfPassword}
-                                    />
-                                </label>
-                            </div>
-                            {
-                                this.state.errText &&
-                                <div className="error-box">
-                                    {this.state.errText}
-                                </div>
-                            }
-                            <button type="submit" id="stfSubmit" className="button">{this.state.buttonName}</button>
-                        </form>
-                    </div>
-                    <div className="form__div">
-                        <p>
-                            <Link to="/students">Click here Student Portal</Link>
-                        </p>
-                        <p>
-                            <Link to="/">Click here Admin Portal</Link>
-                        </p>
-                    </div>
-                </section>
-            </main>
+                                <button type="submit" id="stfSubmit" className="button">{this.state.buttonName}</button>
+                            </form>
+                        </div>
+                        <div className="form__div">
+                            <p>
+                                <Link to="/students">Click here Student Portal</Link>
+                            </p>
+                            <p>
+                                <Link to="/">Click here Admin Portal</Link>
+                            </p>
+                        </div>
+                    </section>
+                </main>
+            </LoadingOverlay>
         )
     }
 }

@@ -4,7 +4,7 @@ import { withRouter} from 'react-router-dom';
 
 const Nav = ({context,}) => (
     <div className="nav">
-        <a className="log-out" onClick={event => context.LogOutHandler(event)}>LogOut</a>
+        <a className="log-out" onClick={event => context.LogOutHandler(event)}>Logout</a>
     </div>
 );
 

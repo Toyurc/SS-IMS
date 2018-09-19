@@ -9,14 +9,15 @@ button {
 }
 
 button:hover {
-    background-color:#4CAF50;
-    color: aliceblue;    
+    background-color: #4CAF50;
+    color: aliceblue;
     border: 2px solid aliceblue;
 }
 
 .dashboard__div {
     text-align: center;
 }
+
 .dashboard__flex {
     display: flex;
     justify-content: center;

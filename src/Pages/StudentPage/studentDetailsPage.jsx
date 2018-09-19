@@ -21,12 +21,12 @@ class studentDetailsPage extends React.Component {
         return [
             {
                 Header: 'Matric No.',
-                accessor: 'matric' 
+                accessor: 'matric'
 
             },
             {
                 Header: 'Student Name',
-                accessor: 'name' 
+                accessor: 'name'
 
             },
         ]
@@ -92,7 +92,7 @@ class studentDetailsPage extends React.Component {
                         data={this.state.students}
                         onFetchData={(state, instance) => {
                             // fetch your data
-                            AxiosInstance.get(BASE_URL +'students')
+                            AxiosInstance.get(BASE_URL + 'students')
                                 .then((res) => {
                                     // Update react-table
                                     this.setState({
@@ -104,34 +104,34 @@ class studentDetailsPage extends React.Component {
                             row => {
                                 return (
                                     <div>
-                                    <ReactTable
-                                        className={'-striped text-align '}
-                                        columns={this.detailsColumn()}
-                                        defaultPageSize={1}
-                                        manual
-                                        freezeWhenExpanded={true}
-                                        showPagination={false}
-                                        getTheadProps={(state, rowInfo, column) => {
-                                            return {
-                                                style: {
-                                                    background: "#FFF",
-                                                    color: "#000",
-                                                    border: "30px",
-                                                }
-                                            };
-                                        }}
-                                        data={this.state.studentDetails} 
-                                        onFetchData={(state, instance) => {
-                                            // fetch your data
-                                            AxiosInstance.get(BASE_URL + `students/${row.original.matric}`)
-                                                .then((res) => {
-                                                    // Update react-table
-                                                    this.setState({
-                                                        studentDetails: res.data,
+                                        <ReactTable
+                                            className={'-striped text-align '}
+                                            columns={this.detailsColumn()}
+                                            defaultPageSize={1}
+                                            manual
+                                            freezeWhenExpanded={true}
+                                            showPagination={false}
+                                            getTheadProps={(state, rowInfo, column) => {
+                                                return {
+                                                    style: {
+                                                        background: "#FFF",
+                                                        color: "#000",
+                                                        border: "30px",
+                                                    }
+                                                };
+                                            }}
+                                            data={this.state.studentDetails}
+                                            onFetchData={(state, instance) => {
+                                                // fetch your data
+                                                AxiosInstance.get(BASE_URL + `students/${row.original.matric}`)
+                                                    .then((res) => {
+                                                        // Update react-table
+                                                        this.setState({
+                                                            studentDetails: res.data,
+                                                        })
                                                     })
-                                                })
-                                        }}
-                                    />
+                                            }}
+                                        />
                                     </div>
                                 );
                             }
