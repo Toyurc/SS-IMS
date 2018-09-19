@@ -17,17 +17,14 @@ class StaffUserPage extends React.Component {
         this.getStaffDetails();
     }
     getStaffDetails() {
-        console.log(this.props)
         let staffId =  this.props.match.params.staffId
         AxiosInstance.get(BASE_URL + `/staffs/${staffId}`)
             .then(response => {
-                console.log(response);
                 this.setState({
-                    staffDetails: response.data,
+                    staffDetails: response.data[0],
                 })
             })
             .catch(error => {
-                console.log(error)
             })
     }
 

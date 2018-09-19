@@ -31,6 +31,38 @@ class StaffDetailsPage extends React.Component {
         ]
     }
 
+    detailsColumn() {
+        return [
+            {
+                Header: 'Staff ID',
+                accessor: 'staff_id'
+            },
+            {
+                Header: 'Date of Employemnt',
+                accessor: 'date_of_employment'
+            },
+            {
+                Header: 'First Name',
+                accessor: 'first_name'
+            },
+            {
+                Header: 'Last Name',
+                accessor: 'last_name'
+            },
+            {
+                Header: 'Phone No.',
+                accessor: 'phone_number'
+            },
+            {
+                Header: 'Email',
+                accessor: 'email_address'
+            },  {
+                Header: 'Department',
+                accessor: 'department'
+            },
+        ]
+    }
+
     render() {
         let accessToken = sessionStorage.getItem('access-token');
         return (
@@ -68,11 +100,13 @@ class StaffDetailsPage extends React.Component {
                             row => {
                                 return (
                                     <div>
-                                        <h1>Holla Amigos</h1>
                                     <ReactTable
                                         className={'-striped text-align '}
                                         columns={this.detailsColumn()}
                                         defaultPageSize={1}
+                                        manual
+                                        freezeWhenExpanded={true}
+                                        showPagination={false}
                                         getTheadProps={(state, rowInfo, column) => {
                                             return {
                                                 style: {
@@ -82,12 +116,11 @@ class StaffDetailsPage extends React.Component {
                                                 }
                                             };
                                         }}
-                                        data={this.state.studentDetails} 
+                                        data={this.state.staffDetails} 
                                         onFetchData={(state, instance) => {
                                             // fetch your data
                                             AxiosInstance.get(BASE_URL + `staffs/${row.original.staff_id}`)
                                                 .then((res) => {
-                                                    console.log(res)
                                                     // Update react-table
                                                     this.setState({
                                                         staffDetails: res.data,

@@ -61,7 +61,8 @@ class StaffRegistration extends React.Component {
             errText: '',
             formInProgress: false,
             PersonalDataFormError:false,
-            button_name: 'Register'
+            button_name: 'Register',
+            success: ''
         }
         this.handleInputChange = this.handleInputChange.bind(this);
     }
@@ -78,7 +79,6 @@ class StaffRegistration extends React.Component {
 
     personalDataFormHandler(event) {
         event.preventDefault();
-        console.log(this.state)
         this.setState({
             formInProgress: true,
             button_name: "In Progress..."
@@ -105,13 +105,32 @@ class StaffRegistration extends React.Component {
 	        doe:userDetails.date_of_emp,
 	        phone_number:userDetails.phone_number,
 	        email_address:userDetails.email,
-	        dept:userDetails.dept
+            dept:userDetails.dept,
+            is_admin: false
         })
         .then(response => {
-            console.log(response)
+            if (response.status === 200 && response.statusText === 'OK') {
+                document
+                .getElementById('registerButton')
+                .removeAttribute('disabled', 'disabled');
+            this.setState({ formInProgress: false, buttonName: "Register", success: 'Registration Successful' });
+            setTimeout(() => {
+                this.setState({ success: '' });
+                this.props.history.push('/dashboard');
+            }, 2500);
+            }
         })
         .catch(error => {
-            console.log(error)
+            this.setState({
+                errText: 'An error occured, pls try again later',
+                buttonName: "Register"
+            })
+            setTimeout(() => {
+                this.setState({ errText: '' });
+            }, 3000);
+            document
+                .getElementById('registerButton')
+                .removeAttribute('disabled', 'disabled')
         })
     }
 
@@ -155,6 +174,11 @@ class StaffRegistration extends React.Component {
             <div>
                 <h2>Staff Registration</h2>
                 <form onSubmit={event => this.personalDataFormHandler(event)} method="POST">
+                    {
+                                this.state.success && <div className="success-box">
+                                    {this.state.success}
+                                </div>
+                    }
                     {
                         RegistrationForm.map((form, index) => (
                             <div 

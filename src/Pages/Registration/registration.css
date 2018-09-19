@@ -25,3 +25,12 @@ form {
     text-align: center;
     border: .5px #28b485 solid;
 }
+.success-box {
+    color: green;
+    border: 1px solid green;
+    background-color: transparent;
+}
+
+.button:disabled {
+    background-color: bisque;
+}

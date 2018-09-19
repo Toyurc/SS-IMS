@@ -44,7 +44,7 @@ class studentDetailsPage extends React.Component {
             },
             {
                 Header: 'Graduated',
-                accessor: ' graduation_year'
+                accessor: 'graduation_year'
             },
             {
                 Header: 'First Name',
@@ -104,11 +104,13 @@ class studentDetailsPage extends React.Component {
                             row => {
                                 return (
                                     <div>
-                                        <h1>Holla Amigos</h1>
                                     <ReactTable
                                         className={'-striped text-align '}
                                         columns={this.detailsColumn()}
                                         defaultPageSize={1}
+                                        manual
+                                        freezeWhenExpanded={true}
+                                        showPagination={false}
                                         getTheadProps={(state, rowInfo, column) => {
                                             return {
                                                 style: {
@@ -123,7 +125,6 @@ class studentDetailsPage extends React.Component {
                                             // fetch your data
                                             AxiosInstance.get(BASE_URL + `students/${row.original.matric}`)
                                                 .then((res) => {
-                                                    console.log(res)
                                                     // Update react-table
                                                     this.setState({
                                                         studentDetails: res.data,

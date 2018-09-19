@@ -70,7 +70,6 @@ class StudentPage extends React.Component {
                 }
             })
             .catch(error => {
-                console.log('error', error)
                 this.setState({
                     errText: 'An error occured, pls make usre your matric no. and password are valid',
                     buttonName: "Login"

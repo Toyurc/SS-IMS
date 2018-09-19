@@ -68,6 +68,7 @@ class StudentRegistration extends React.Component {
             email: '',
             year_of_adm: '',
             year_of_grad: '',
+            success: '',
             errText: '',
             formInProgress: false,
             PersonalDataFormError: false,
@@ -88,7 +89,6 @@ class StudentRegistration extends React.Component {
 
     personalDataFormHandler(event) {
         event.preventDefault();
-        console.log(this.state)
         this.setState({
             formInProgress: true,
             button_name: "In Progress..."
@@ -110,19 +110,37 @@ class StudentRegistration extends React.Component {
 
         AxiosInstance.post(BASE_URL + 'students',{
             matric:userDetails.matric_no,
-	first_name:userDetails.first_name,
-	last_name:userDetails.last_name,
-	middle_name:userDetails.middle_name,
-	phone_number:userDetails.phone_number,
-	email_address:userDetails.email_address,
-	ad_year:userDetails.year_of_adm,
-	grad_year:userDetails.year_of_grad
+	        first_name:userDetails.first_name,
+	        last_name:userDetails.last_name,
+	        middle_name:userDetails.middle_name,
+	        phone_number:userDetails.phone_number,
+	        email_address:userDetails.email,
+	        ad_year:userDetails.year_of_adm,
+            grad_year:userDetails.year_of_grad
         })
         .then(response => {
-            console.log(response)
+            if (response.status === 200 && response.statusText === 'OK') {
+                document
+                .getElementById('registerButton')
+                .removeAttribute('disabled', 'disabled');
+            this.setState({ formInProgress: false, buttonName: "Register", success: 'Registration Successful' });
+            setTimeout(() => {
+                this.setState({ success: '' });
+                this.props.history.push('/dashboard');
+            }, 2500);
+            }
         })
         .catch(error => {
-            console.log(error)
+            this.setState({
+                errText: 'An error occured, pls try again later',
+                buttonName: "Register"
+            })
+            setTimeout(() => {
+                this.setState({ errText: '' });
+            }, 3000);
+            document
+                .getElementById('registerButton')
+                .removeAttribute('disabled', 'disabled')
         })
     }
 
@@ -166,6 +184,11 @@ class StudentRegistration extends React.Component {
             <div>
                 <h2>Student Registration</h2>
                 <form onSubmit={event => this.personalDataFormHandler(event)} method="POST">
+                    {
+                            this.state.success && <div className="success-box">
+                                {this.state.success}
+                            </div>
+                    }
                     {
                         RegistrationForm.map((form, index) => (
                             <div

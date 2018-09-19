@@ -55,7 +55,16 @@ class LandingPage extends React.Component {
             }
         })
             .then(response => {
-                if (response.status === 200 && response.statusText === 'OK') {
+                if (response.status === 200 && response.statusText === 'OK' && response.data.is_admin === false) {
+                    document
+                        .getElementById('admin')
+                        .removeAttribute('disabled', 'disabled');
+                    this.setState({ formInProgress: false, buttonName: "Login", errText: 'You aren\'t an admin, pls login in on the staff portal '});
+                    setTimeout(() => {
+                        this.setState({ errText: '' });
+                    },2500)
+                }
+                else if (response.status === 200 && response.statusText === 'OK' && response.data.is_admin === true) {
                     document
                         .getElementById('admin')
                         .removeAttribute('disabled', 'disabled');
@@ -66,9 +75,8 @@ class LandingPage extends React.Component {
                         this.props.history.push('/dashboard');
                     }, 2500);
                 }
-            })
+        })
             .catch(error => {
-                console.log('error', error)
                 this.setState({
                     errText: 'An error occured, pls make usre your staff id and password are valid',
                     buttonName: "Login"

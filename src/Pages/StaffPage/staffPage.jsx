@@ -57,7 +57,7 @@ class StaffPage extends React.Component {
             }
         })
             .then(response => {
-                if (response.status === 200 && response.statusText === 'OK') {
+                if (response.status === 200 && response.statusText === 'OK' && response.data.is_admin === false) {
                     document
                         .getElementById('stfSubmit')
                         .removeAttribute('disabled', 'disabled');
@@ -68,9 +68,17 @@ class StaffPage extends React.Component {
                         this.props.history.push(`/staffs/${userDetails.staffNo}`, { staffNo: userDetails.staffNo });
                     }, 2500);
                 }
+                else if (response.status === 200 && response.statusText === 'OK' && response.data.is_admin === true) {
+                    document
+                    .getElementById('stfSubmit')
+                    .removeAttribute('disabled', 'disabled');
+                this.setState({ formInProgress: false, buttonName: "Login", errText: 'You are an admin, pls login on the admin portal' });
+                setTimeout(() => {
+                    this.setState({ errText: '' });
+                }, 2500);
+                }
             })
             .catch(error => {
-                console.log('error', error)
                 this.setState({
                     errText: 'An error occured, pls make usre your staff id and password are valid',
                     buttonName: "Login"

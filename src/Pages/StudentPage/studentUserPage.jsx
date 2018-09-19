@@ -10,7 +10,7 @@ class StudentUserPage extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            studentDetails: {},
+            studentDetails: [],
         }
     }
     componentDidMount () {
@@ -20,13 +20,11 @@ class StudentUserPage extends React.Component {
         let matricNo =  this.props.match.params.matricNo
         AxiosInstance.get(BASE_URL + `/students/${matricNo}`)
             .then(response => {
-                console.log(response);
                 this.setState({
-                    studentDetails: response.data,
+                    studentDetails: response.data[0],
                 })
             })
             .catch(error => {
-                console.log(error)
             })
     }
 
